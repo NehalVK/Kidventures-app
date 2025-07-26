@@ -17,7 +17,7 @@ const Header = () => {
       <div className="flex items-center justify-between">
         <a href="/" className="flex items-center gap-2">
           <img 
-            src="/kidventures final logo.png" 
+            src="/logo.png" 
             alt="Kidventures Logo" 
             className="h-14 w-auto"
           />
