@@ -1,3 +1,4 @@
+import React from "react";
 import { Menu, X, UserPlus, LogIn } from "lucide-react";
 import { useState } from "react";
 import { 
@@ -5,77 +6,110 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/kidventurelogo.jpg";
 
-// --- THE NEW APPROACH: Import the logo directly ---
-// This path is relative to the Header.tsx file.
-import newLogo from '../assets/kidventurelogo.jpg'; 
+interface AgeOption {
+  value: string;
+  label: string;
+}
 
-const Header = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+interface NavLinkProps {
+  href: string;
+  className: string;
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+interface AgeSelectorProps {
+  className?: string;
+}
+
+const ageOptions: AgeOption[] = [
+  { value: "2-5", label: "Ages 2-5" },
+  { value: "5-7", label: "Ages 5-7" },
+  { value: "8-10", label: "Ages 8-10" },
+  { value: "11-15", label: "Ages 11-15" },
+];
+
+const NavLink: React.FC<NavLinkProps> = ({ href, className, children, onClick }) => (
+  <a 
+    href={href}
+    className={`px-4 py-2 rounded-full font-bold transition-colors flex items-center gap-2 ${className}`}
+    onClick={onClick}
+  >
+    {children}
+  </a>
+);
+
+const AgeSelector: React.FC<AgeSelectorProps> = ({ className = "" }) => (
+  <div className={`bg-white rounded-lg px-2 py-1 ${className}`}>
+    <Select defaultValue="">
+      <SelectTrigger className="border-none focus:ring-0 focus:ring-offset-0">
+        <SelectValue placeholder="Select age" />
+      </SelectTrigger>
+      <SelectContent>
+        {ageOptions.map(({ value, label }) => (
+          <SelectItem key={value} value={value}>{label}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  </div>
+);
+
+const Header: React.FC = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+
+  const handleMobileNavClick = () => setMobileMenuOpen(false);
 
   return (
     <header className="sticky top-0 z-50 bg-gradient-to-r from-kidblue via-kidpurple to-kidpink p-4 shadow-md">
       <div className="flex items-center justify-between">
         <a href="/" className="flex items-center gap-2">
-          {/* --- Use the imported logo variable as the source --- */}
           <img 
-            src={newLogo} 
+            src={logo} 
             alt="Kidventures Logo" 
             className="h-14 w-auto"
           />
         </a>
         
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-4">
-          <div className="bg-white rounded-lg px-2 py-1">
-            <Select>
-              <SelectTrigger className="w-[120px] border-none focus:ring-0 focus:ring-offset-0">
-                <SelectValue placeholder="Select age" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="2-5">Ages 2-5</SelectItem>
-                <SelectItem value="5-7">Ages 5-7</SelectItem>
-                <SelectItem value="8-10">Ages 8-10</SelectItem>
-                <SelectItem value="11-15">Ages 11-15</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+        <nav className="hidden md:flex items-center gap-4">
+          <AgeSelector />
           
-          <a 
+          <NavLink 
             href="/login" 
-            className="bg-white text-purple-600 px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition-colors flex items-center gap-2"
+            className="bg-white text-purple-600 hover:bg-gray-100"
           >
             <LogIn size={16} />
             Login
-          </a>
+          </NavLink>
           
-          <a 
+          <NavLink 
             href="/signup" 
-            className="bg-white text-purple-600 px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition-colors flex items-center gap-2"
+            className="bg-white text-purple-600 hover:bg-gray-100"
           >
             <UserPlus size={16} />
             Sign Up
-          </a>
+          </NavLink>
           
-          <a 
+          <NavLink 
             href="/parents-zone" 
-            className="bg-white text-purple-600 px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition-colors"
+            className="bg-white text-purple-600 hover:bg-gray-100"
           >
             Parents Zone
-          </a>
+          </NavLink>
           
-          <a 
+          <NavLink 
             href="/leaderboard" 
-            className="bg-kidyellow text-white px-4 py-2 rounded-full font-bold hover:bg-yellow-500 transition-colors"
+            className="bg-kidyellow text-white hover:bg-yellow-500"
           >
             Leaderboard
-          </a>
-        </div>
+          </NavLink>
+        </nav>
 
-        {/* Mobile Menu Button */}
         <Button
           variant="ghost"
           size="icon"
@@ -88,57 +122,45 @@ const Header = () => {
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div className="md:hidden mt-4 pb-4 border-t border-white/20">
+        <nav className="md:hidden mt-4 pb-4 border-t border-white/20">
           <div className="flex flex-col gap-4 pt-4">
-            <div className="bg-white rounded-lg px-2 py-1 w-full">
-              <Select>
-                <SelectTrigger className="w-full border-none focus:ring-0 focus:ring-offset-0">
-                  <SelectValue placeholder="Select age" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="2-5">Ages 2-5</SelectItem>
-                  <SelectItem value="5-7">Ages 5-7</SelectItem>
-                  <SelectItem value="8-10">Ages 8-10</SelectItem>
-                  <SelectItem value="11-15">Ages 11-15</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <AgeSelector className="w-full" />
             
-            <a 
+            <NavLink 
               href="/login" 
-              className="bg-white text-purple-600 px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition-colors text-center flex items-center justify-center gap-2"
-              onClick={() => setMobileMenuOpen(false)}
+              className="bg-white text-purple-600 hover:bg-gray-100 justify-center"
+              onClick={handleMobileNavClick}
             >
               <LogIn size={16} />
               Login
-            </a>
+            </NavLink>
             
-            <a 
+            <NavLink 
               href="/signup" 
-              className="bg-white text-purple-600 px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition-colors text-center flex items-center justify-center gap-2"
-              onClick={() => setMobileMenuOpen(false)}
+              className="bg-white text-purple-600 hover:bg-gray-100 justify-center"
+              onClick={handleMobileNavClick}
             >
               <UserPlus size={16} />
               Sign Up
-            </a>
+            </NavLink>
             
-            <a 
+            <NavLink 
               href="/parents-zone" 
-              className="bg-white text-purple-600 px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition-colors text-center"
-              onClick={() => setMobileMenuOpen(false)}
+              className="bg-white text-purple-600 hover:bg-gray-100 justify-center"
+              onClick={handleMobileNavClick}
             >
               Parents Zone
-            </a>
+            </NavLink>
             
-            <a 
+            <NavLink 
               href="/leaderboard" 
-              className="bg-kidyellow text-white px-4 py-2 rounded-full font-bold hover:bg-yellow-500 transition-colors text-center"
-              onClick={() => setMobileMenuOpen(false)}
+              className="bg-kidyellow text-white hover:bg-yellow-500 justify-center"
+              onClick={handleMobileNavClick}
             >
               Leaderboard
-            </a>
+            </NavLink>
           </div>
-        </div>
+        </nav>
       )}
     </header>
   );
