@@ -9,6 +9,10 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
+// --- THE NEW APPROACH: Import the logo directly ---
+// This path is relative to the Header.tsx file.
+import newLogo from '../assets/kidventurelogo.jpg'; 
+
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -16,8 +20,9 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-gradient-to-r from-kidblue via-kidpurple to-kidpink p-4 shadow-md">
       <div className="flex items-center justify-between">
         <a href="/" className="flex items-center gap-2">
+          {/* --- Use the imported logo variable as the source --- */}
           <img 
-            src="/logo.png" 
+            src={newLogo} 
             alt="Kidventures Logo" 
             className="h-14 w-auto"
           />
